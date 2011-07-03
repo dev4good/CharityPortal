@@ -171,13 +171,14 @@
                 @:$("#project-@item.Id").data("projObj", { name: "@item.Name", description: "@item.Description", lat: "@item.Location.Latitude", lon: "@item.Location.Longitude" });
              }
 
-             $(".js-projectLink").click(function () {
+             $(".js-projectLink").click(function (event) {
+                 event.preventDefault();
                  var projObj = $(this).data("projObj");
                  loadTweets(projObj);
                  loadNews(projObj);
-                 loadPhotos(projObj);
+//                 loadPhotos(projObj);
                  loadBlogs(projObj);
-                 return false;
+                 
              });
 
              // $("#butLoad").click();
@@ -224,7 +225,7 @@
         <div id="tweetsContent"></div>
      </div>
 
-    <div id="newsPanel" class="contentPanel"><h3>News</h3>
+     <div id="newsPanel" class="contentPanel"><h3>News</h3>
         <div id="newsContent"></div>
      </div>
 
