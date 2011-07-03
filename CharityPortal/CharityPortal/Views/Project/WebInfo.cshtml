@@ -1,0 +1,241 @@
+﻿@model IEnumerable<CharityPortal.Data.Project>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-language" content="en" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+	<script src="http://www.google.com/jsapi?key=AIzaSyA5m1Nc8ws2BbmPRwKu5gFradvD_hgq6G0" type="text/javascript"></script>
+    
+    <title>See whats on the web near your project</title>
+
+    <style type="text/css">
+
+        * {
+            background-color: Transparent;
+            border: 0 none;
+            font-family: Verdana,Helvetica,Sans-Serif;
+            font-size: 9pt;
+            font-weight: normal;
+            line-height: normal;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .contentPanel {float:left; width:500px; height:300px; overflow:scroll; margin-left:50px}
+        .tweet {margin:8px}
+        .news {margin:8px}
+        .photo { margin:8px }
+        .blog { margin:8px }
+     </style>
+
+     <script type="text/javascript">
+         google.load('search', '1');
+
+         $(document).ready(function () {
+             function newsComplete() {
+
+                 // Check that we got results
+
+                 if (newsSearch.results && newsSearch.results.length > 0) {
+                     for (var i = 0; i < newsSearch.results.length; i++) {
+
+                         // Create HTML elements for search results
+                         var p = document.createElement('p');
+                         var a = document.createElement('a');
+                         $(p).attr("class", "news");
+                         a.href = newsSearch.results[i].url;
+                         a.innerHTML = newsSearch.results[i].title;
+
+                         // Append search results to the HTML nodes
+                         p.appendChild(a);
+
+                         $("#newsContent").append(p);
+                     }
+                 }
+             };
+
+             function loadNews(project) {
+                 var panel = $("#newsContent");
+                 panel.children().remove();
+                 panel.show();
+
+                 // Create a News Search instance.
+                 newsSearch = new google.search.NewsSearch();
+
+                 // Set searchComplete as the callback function when a search is 
+                 // complete.  The newsSearch object will have results in it.
+                 newsSearch.setSearchCompleteCallback(this, newsComplete, null);
+
+                 // Specify search quer(ies)
+                 newsSearch.execute('gaza');
+
+             };
+
+             function loadPhotos(project) {
+                 var panel = $("#photosContent");
+                 panel.children().remove();
+                 panel.show();
+
+                 //http: //api.flickr.com/services/feeds/photos_public.gne?tags=gaza&format=json
+
+                 $.ajax({
+                     url: "http://api.flickr.com/services/feeds/photos_public.gne?tags=" + project.name + "&format=json",
+                     dataType: "jsonp",
+                     jsonp: false,
+                     jsonpCallback: "jsonFlickrFeed",
+                     timeout: 5000,
+                     success: function (data, textStatus, jqXHR) {
+                         $.each(data.items, function (i, item) {
+                             panel.append($("p").attr("class", "photo").append(item.description));
+                         });
+                     },
+                     error: function () {
+
+                     }
+                 });
+             };
+
+             function blogsComplete() {
+
+                 // Check that we got results
+                 if (blogSearch.results && blogSearch.results.length > 0) {
+                     for (var i = 0; i < blogSearch.results.length; i++) {
+
+                         // Create HTML elements for search results
+                         var p = document.createElement('p');
+                         var a = document.createElement('a');
+                         $(p).attr("class", "blog");
+                         a.href = blogSearch.results[i].postUrl;
+                         a.innerHTML = blogSearch.results[i].title;
+
+                         // Append search results to the HTML nodes
+                         p.appendChild(a);
+                         $("#blogsContent").append(p);
+                     }
+                 }
+             }
+
+             function loadBlogs(project) {
+
+                 var panel = $("#blogsContent");
+                 panel.children().remove();
+                 panel.show();
+
+                 // Create a BlogSearch instance.
+                 blogSearch = new google.search.BlogSearch();
+
+                 // Order search results in reverse chronological order by publication date
+                 blogSearch.setResultOrder(google.search.Search.ORDER_BY_DATE);
+
+                 // Set searchComplete as the callback function when a search is complete.  The
+                 // blogSearch object will have results in it.
+                 blogSearch.setSearchCompleteCallback(this, blogsComplete, null);
+
+                 // Execute search query
+                 blogSearch.execute(project.name);
+
+                 // Include the required Google branding
+                 google.search.Search.getBranding('branding');
+             }
+
+             function loadTweets(project) {
+                 var panel = $("#tweetsContent");
+                 panel.children().remove();
+                 panel.show();
+
+                 $.ajax({
+                     url: "http://search.twitter.com/search.json?geocode=" + project.lat + "%2C" + project.lon + "%2C25km",
+                     dataType: "jsonp",
+                     timeout: 5000,
+                     success: function (data, textStatus, jqXHR) {
+                         $.each(data.results, function (i, item) {
+                             panel.append($("<p>" + item.text + "<\p>").attr("class", "tweet"));
+                         });
+                     },
+                     error: function () {
+
+                     }
+                 });
+             };
+
+             // render the project js objects with the project links
+             @foreach (var item in Model)
+             {
+                @:$("#project-@item.Id").data("projObj", { name: "@item.Name", description: "@item.Description", lat: "@item.Location.Latitude", lon: "@item.Location.Longitude" });
+             }
+
+             $(".js-projectLink").click(function () {
+                 var projObj = $(this).data("projObj");
+                 loadTweets(projObj);
+                 loadNews(projObj);
+                 loadPhotos(projObj);
+                 loadBlogs(projObj);
+                 return false;
+             });
+
+             // $("#butLoad").click();
+         });
+
+    </script>
+</head>
+<body>
+    <h2>See what's on the web near your project</h2>
+
+    <div id="projectListPanel">
+    <table>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Is Active
+        </th>
+    </tr>
+    @foreach (var item in Model) {
+    <tr>
+        <td>
+            <a id="project-@item.Id" class="js-projectLink" href="#">@Html.DisplayFor(modelItem => item.Name)</a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+    </tr>
+    }
+    </table>
+
+    </div>
+
+    <br />
+    
+    <div id="tweetsPanel" class="contentPanel"><h3>Tweets</h3>
+        <div id="tweetsContent"></div>
+     </div>
+
+    <div id="newsPanel" class="contentPanel"><h3>News</h3>
+        <div id="newsContent"></div>
+     </div>
+
+     <div id="photosPanel" class="contentPanel" ><h3>Photos</h3>
+        <div id="photosContent"></div>
+     </div>
+
+     <div id="blogsPanel" class="contentPanel"><h3>Blogs</h3>
+        <div id="blogsContent"></div>
+     </div>
+
+     <div style="clear:both" />
+</body>
+</html>
