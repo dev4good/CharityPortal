@@ -53,6 +53,8 @@ namespace ResourceMatcher
             }
 
             ImportTweets();
+            ResourceFeeds.Charity1.RetrieveProjects.Execute();
+
 
             while (!_stopLoop)
             {

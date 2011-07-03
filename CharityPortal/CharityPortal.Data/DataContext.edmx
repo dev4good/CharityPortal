@@ -48,6 +48,7 @@
     <Property Name="Location_Longitude" Type="float" Nullable="false" />
     <Property Name="Location_Latitude" Type="float" Nullable="false" />
     <Property Name="Location_Address" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ExternalId" Type="nvarchar" Nullable="true" MaxLength="255" />
     <Property Name="AdminOrganization_Id" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="Resources">
@@ -212,6 +213,7 @@
           <NavigationProperty Name="AdminOrganization" Relationship="DataContext.OrganizationProject" FromRole="Project" ToRole="Organization" />
           <NavigationProperty Name="RequiredResources" Relationship="DataContext.ProjectResource" FromRole="Project" ToRole="Resource" />
           <Property Name="Location" Type="DataContext.Location" Nullable="false" />
+          <Property Type="String" Name="ExternalId" Nullable="true" MaxLength="255" />
         </EntityType>
         <EntityType Name="Resource">
           <Key>
@@ -299,6 +301,7 @@
             <ScalarProperty Name="Latitude" ColumnName="Location_Latitude" />
             <ScalarProperty Name="Address" ColumnName="Location_Address" />
           </ComplexProperty>
+          <ScalarProperty Name="ExternalId" ColumnName="ExternalId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -408,7 +411,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram Name="DataContext" >
-        <EntityTypeShape EntityType="DataContext.Project" Width="2" PointX="3.125" PointY="0.875" Height="2.3648893229166661" />
+        <EntityTypeShape EntityType="DataContext.Project" Width="2" PointX="3.125" PointY="0.875" Height="2.5571907552083331" />
         <EntityTypeShape EntityType="DataContext.Resource" Width="1.75" PointX="5.625" PointY="0.875" Height="3.3263964843749996" />
         <EntityTypeShape EntityType="DataContext.Organization" Width="1.75" PointX="0.75" PointY="1" Height="1.9802864583333331" />
         <AssociationConnector Association="DataContext.OrganizationProject">
@@ -416,13 +419,13 @@
           <ConnectorPoint PointX="3.125" PointY="1.9901432291666668" />
         </AssociationConnector>
         <AssociationConnector Association="DataContext.ProjectResource">
-          <ConnectorPoint PointX="5.125" PointY="2.0574446614583328" />
-          <ConnectorPoint PointX="5.625" PointY="2.0574446614583328" />
+          <ConnectorPoint PointX="5.125" PointY="2.1535953776041667" />
+          <ConnectorPoint PointX="5.625" PointY="2.1535953776041667" />
         </AssociationConnector>
         <AssociationConnector Association="DataContext.OrganizationResource">
           <ConnectorPoint PointX="1.59375" PointY="2.9802864583333331" />
-          <ConnectorPoint PointX="1.59375" PointY="3.5574446614583328" />
-          <ConnectorPoint PointX="5.625" PointY="3.5574446614583328" />
+          <ConnectorPoint PointX="1.59375" PointY="3.6535953776041667" />
+          <ConnectorPoint PointX="5.625" PointY="3.6535953776041667" />
         </AssociationConnector>
         <EntityTypeShape EntityType="DataContext.Tag" Width="1.5" PointX="2.5" PointY="3.875" Height="1.5956835937499996" />
         <AssociationConnector Association="DataContext.TagResource">

@@ -115,6 +115,11 @@ namespace CharityPortal.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult WebInfo()
+        {
+            return View(db.Projects.ToList());
+        }
+
         protected override void Dispose(bool disposing)
         {
             db.Dispose();

@@ -28,10 +28,14 @@ namespace CharityPortal.Utils
         {
             return new Marker() {
                 Title = resource.Title,
-                Content = String.Format("<h3>{0}</h3>{1}", resource.Title, resource.Description),
+                Content = String.Format(
+                    "<h3>{0}</h3><p>{1}</p><p><img src='{2}'/></p>", 
+                    resource.Title, 
+                    resource.Description, 
+                    resource.ImageUrl),
                 Latitude = resource.Location.Latitude,
                 Longitude = resource.Location.Longitude,
-                Address = resource.Location.Address
+                Address = resource.Location.Address,
             };
         }
 
