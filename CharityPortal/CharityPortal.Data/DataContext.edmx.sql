@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 07/03/2011 11:35:52
--- Generated from EDMX file: C:\Users\Ivan Zlatev\Desktop\dev4good\CharityPortal\CharityPortal.Data\DataContext.edmx
+-- Date Created: 07/03/2011 15:22:20
+-- Generated from EDMX file: C:\Devs\Dev4Good\CharityPortal\CharityPortal.Data\DataContext.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -69,6 +69,7 @@ CREATE TABLE [dbo].[Projects] (
     [Location_Longitude] float  NOT NULL,
     [Location_Latitude] float  NOT NULL,
     [Location_Address] nvarchar(max)  NOT NULL,
+    [ExternalId] nvarchar(255)  NULL,
     [AdminOrganization_Id] int  NULL
 );
 GO

@@ -465,6 +465,30 @@ namespace CharityPortal.Data
         private global::System.Boolean _IsActive;
         partial void OnIsActiveChanging(global::System.Boolean value);
         partial void OnIsActiveChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ExternalId
+        {
+            get
+            {
+                return _ExternalId;
+            }
+            set
+            {
+                OnExternalIdChanging(value);
+                ReportPropertyChanging("ExternalId");
+                _ExternalId = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ExternalId");
+                OnExternalIdChanged();
+            }
+        }
+        private global::System.String _ExternalId;
+        partial void OnExternalIdChanging(global::System.String value);
+        partial void OnExternalIdChanged();
 
         #endregion
         #region Complex Properties
