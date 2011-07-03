@@ -48,6 +48,7 @@
     <Property Name="Location_Longitude" Type="float" Nullable="false" />
     <Property Name="Location_Latitude" Type="float" Nullable="false" />
     <Property Name="Location_Address" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ExternalId" Type="nvarchar" Nullable="true" MaxLength="255" />
     <Property Name="AdminOrganization_Id" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="Resources">
@@ -300,6 +301,7 @@
             <ScalarProperty Name="Latitude" ColumnName="Location_Latitude" />
             <ScalarProperty Name="Address" ColumnName="Location_Address" />
           </ComplexProperty>
+          <ScalarProperty Name="ExternalId" ColumnName="ExternalId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
