@@ -18,7 +18,7 @@ namespace CharityPortal.Controllers
 
         public ViewResult Index()
         {
-            return View(db.Projects.ToList());
+            return View(db.Projects.OrderByDescending(x => x.Id).ToList());
         }
 
         //

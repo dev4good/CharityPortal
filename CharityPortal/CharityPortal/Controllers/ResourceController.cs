@@ -24,12 +24,12 @@ namespace CharityPortal.Controllers
 
         public ViewResult IndexNeeded()
         {
-            return View("Index", db.Resources.Where(X => X.Organization == null).ToList());
+            return View("Index", db.Resources.Where(X => X.Organization == null).OrderByDescending(r => r.Id).ToList());
         }
 
         public ViewResult IndexAvaliable()
         {
-            return View("Index" ,db.Resources.Where(X=> X.Organization != null).ToList() );
+            return View("Index", db.Resources.Where(X => X.Organization != null).OrderByDescending(r => r.Id).ToList());
         }
 
 

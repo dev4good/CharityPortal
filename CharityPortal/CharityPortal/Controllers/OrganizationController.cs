@@ -17,7 +17,7 @@ namespace CharityPortal.Controllers
         public ActionResult Index()
         {
             var context = new DataContextContainer( ConfigurationManager.ConnectionStrings["DataContextContainer"].ConnectionString);
-            List<Organization> organizations = context.Organizations.ToList();
+            List<Organization> organizations = context.Organizations.OrderByDescending(x => x.Id).ToList();
             return View(organizations);
         }
 
@@ -27,7 +27,7 @@ namespace CharityPortal.Controllers
         public ActionResult Details(int id)
         {
             var context = new DataContextContainer();
-                        Organization organization = context.Organizations.Where(X => X.Id == id).FirstOrDefault();
+            Organization organization = context.Organizations.OrderByDescending(x => x.Id).Where(X => X.Id == id).FirstOrDefault();
             return View(organization);
         }
 
