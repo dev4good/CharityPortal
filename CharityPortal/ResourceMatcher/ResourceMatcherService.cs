@@ -250,6 +250,7 @@ namespace ResourceMatcher
             public string Author { get; set; }
             public string ProfileImageUrl { get; set; }
             public DateTime Timestamp { get; set; }
+            public string Location { get; set; }
 
             public Tweet()
             { }
@@ -261,6 +262,7 @@ namespace ResourceMatcher
                 ProfileImageUrl = tweet.ProfileImageUrl;
                 Author = tweet.Author;
                 Timestamp = tweet.Timestamp;
+                Location = tweet.Location;
             }
 
             public override string ToString()
@@ -270,6 +272,8 @@ namespace ResourceMatcher
         }
 
         private static string _atomNamespace = "http://www.w3.org/2005/Atom";
+
+        private static string _georssNamespace = "http://www.georss.org/georss";
 
         private static XName _entryName = XName.Get("entry", _atomNamespace);
 
@@ -283,6 +287,8 @@ namespace ResourceMatcher
 
         private static XName _titleName = XName.Get("title", _atomNamespace);
 
+        private static XName _point = XName.Get("point", _georssNamespace);
+
         private static IEnumerable<Tweet> ParseTwitterSearch(string response)
         {
             var doc = XDocument.Parse(response);
@@ -290,14 +296,11 @@ namespace ResourceMatcher
                       .Select(entryElement => new Tweet()
                       {
                           Title = entryElement.Descendants(_titleName).Single().Value,
-                          Id = long.Parse(entryElement.Descendants
-                        (_idName).Single().Value.Split(':')[2]),
-                          ProfileImageUrl = entryElement.Descendants
-                        (_linkName).Skip(1).First().Attribute("href").Value,
-                          Timestamp = DateTime.Parse(entryElement.Descendants
-                        (_publishedName).Single().Value),
-                          Author = ParseTwitterName(entryElement.Descendants
-                        (_nameName).Single().Value)
+                          Id = long.Parse(entryElement.Descendants(_idName).Single().Value.Split(':')[2]),
+                          ProfileImageUrl = entryElement.Descendants(_linkName).Skip(1).First().Attribute("href").Value,
+                          Timestamp = DateTime.Parse(entryElement.Descendants(_publishedName).Single().Value),
+                          Author = ParseTwitterName(entryElement.Descendants(_nameName).Single().Value),
+                          Location = (entryElement.Descendants(_point).FirstOrDefault()??new XElement("point","51.5,1.75")).Value
                       });
         }
 
