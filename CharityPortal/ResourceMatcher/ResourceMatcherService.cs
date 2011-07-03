@@ -22,6 +22,8 @@ namespace ResourceMatcher
     public partial class ResourceMatcherService : ServiceBase
     {
         private bool _stopLoop = false;
+        private static Random _Random = new Random();
+
         public ResourceMatcherService()
         {
             InitializeComponent();
@@ -60,7 +62,7 @@ namespace ResourceMatcher
             }
         }
 
-        private AppSetting _lastTweetId = new AppSetting { Name = "LastTweetId", Value = "0"};
+        private AppSetting _lastTweetId = null;
 
         /// <summary>
         /// Update the recorded Id of the most recent tweet
@@ -71,11 +73,17 @@ namespace ResourceMatcher
             {
                 //Get from DB
                 _lastTweetId = _context.AppSettings.FirstOrDefault(s => s.Name == "LastTweetId");
+
+                if (_lastTweetId == null)
+                {
+                    _lastTweetId = new AppSetting { Name = "LastTweetId", Value = "0" };
+                    _context.AppSettings.AddObject(_lastTweetId);
+                }
             }
 
             if (tweets.Any())
             {
-                _lastTweetId.Value = Math.Max(int.Parse(_lastTweetId.Value), tweets.Max(t => t.Id)).ToString();
+                _lastTweetId.Value = Math.Max(long.Parse(_lastTweetId.Value), tweets.Max(t => t.Id)).ToString();
                 _context.SaveChanges();
             }
         }
@@ -101,12 +109,14 @@ namespace ResourceMatcher
             return Observable.Empty<string>();
         }
 
-        private static readonly string _MagicHashTag = "#dev4goodgaza";
+        private const string _MagicHashTag = "#dev4goodgaza";
 
         private void ImportTweets()
         {
+            UpdateLastTweetId(Enumerable.Empty<Tweet>());
+
             Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(30))
-                .SelectMany(ticks => SearchTwitter(HttpUtility.UrlEncode(_MagicHashTag), int.Parse(_lastTweetId.Value)))
+                .SelectMany(ticks => SearchTwitter(HttpUtility.UrlEncode(_MagicHashTag), long.Parse(_lastTweetId.Value)))
                 .Select(ParseTwitterSearch)
                 .Subscribe(tweets => { 
                                         UpdateLastTweetId(tweets); 
@@ -118,7 +128,10 @@ namespace ResourceMatcher
         private void SaveResourceFromTweet(Tweet tweet)
         {
             Resource resource = null;
-            Regex tweetSplitter = new Regex(@"^(" + _MagicHashTag + @")\W+(#(p|o)\W*(\w+))\W+(.*?(x(\d+)\W*(\w*)){0,1})$");
+
+            Regex tweetSplitter = new Regex(@"^("+_MagicHashTag+@")\s+(#(?<ownerType>p|o)\s*(?<owner>\S+))\s+((?<title>.*?)(x(?<count>\d+)\s*(?<units>\S*)){0,1})$");
+
+            Regex imageUrlsRegex = new Regex(@"(http://yfrog.com/\S+)\s+");
 
             MatchCollection matches = tweetSplitter.Matches(tweet.Title);
             if(matches.Count==1)
@@ -126,15 +139,15 @@ namespace ResourceMatcher
                 //Looks like a good tweet
                 resource= new Resource();
                 var match = matches[0];
-                string ownerType = match.Groups[3].Value; //P or O
-                string ownerName = match.Groups[4].Value; //numeric
+                string ownerType = match.Groups["ownerType"].Value; //P or O
+                string ownerName = match.Groups["owner"].Value; //name
 
                 int quantity;
                 string units;
                 if (match.Groups.Count > 7)
                 {
-                    quantity = int.Parse(match.Groups[7].Value);
-                    units = match.Groups[8].Value;
+                    quantity = int.Parse(match.Groups["count"].Value);
+                    units = match.Groups["units"].Value;
                 }
                 else
                 {
@@ -183,13 +196,13 @@ namespace ResourceMatcher
 
                         //TODO: Make this correct
                         project.Location.Address = string.Empty;
-                        project.Location.Latitude = 51.5;
-                        project.Location.Longitude = -1.75;
+                        project.Location.Latitude = 51.5 + (_Random.NextDouble() - 0.5);
+                        project.Location.Longitude = -1.75 + (_Random.NextDouble() - 0.5);
                     }
                     resource.Project = project;
                 }
 
-                string description = match.Groups[5].Value; //description
+                string description = match.Groups["title"].Value; //description
                 resource.Description = description;
                 resource.Title = description;
                 resource.Quantity = quantity;
@@ -197,8 +210,13 @@ namespace ResourceMatcher
 
                 //TODO: Make this correct
                 resource.Location.Address = string.Empty;
-                resource.Location.Latitude = 51.5;
-                resource.Location.Longitude = -1.75;
+                resource.Location.Latitude = 51.5 + (_Random.NextDouble()-0.5);
+                resource.Location.Longitude = -1.75 + (_Random.NextDouble() - 0.5);
+                var imageMatches = imageUrlsRegex.Matches(tweet.Title);
+                if (imageMatches.Count > 0)
+                {
+                    resource.ImageUrl = imageMatches[0].Groups[1].Value;
+                }
 
                 //resource.Tags.Add(new Tag() {Name = ""});
 
