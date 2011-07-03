@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="b756320a-2aef-4d1b-b62c-36837cf7dbaf" name="trev@FETA 2011-07-02 18:19:19" runUser="FETA\trev" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Local" id="8bedddba-33ee-432a-b41b-9b674dfa1c65">
+    <Description>These are default test settings for a local test run.</Description>
+    <Deployment enabled="false" runDeploymentRoot="trev_FETA 2011-07-02 18_19_19">
+      <DeploymentItem filename="D:\trev\Dev\dev4good\CharityPortal\CharityPortal.Data\bin\Debug\CharityPortal.Data.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2011-07-02T18:19:19.7738560+01:00" queuing="2011-07-02T18:19:19.7948572+01:00" start="2011-07-02T18:19:19.8128582+01:00" finish="2011-07-02T18:19:20.0568721+01:00" />
+  <ResultSummary outcome="Error">
+    <Counters total="1" executed="1" error="1" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" passed="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="PopulateTags" storage="d:\trev\dev\dev4good\charityportal\charityportal.testdata\bin\debug\charityportal.testdata.dll" id="4166881a-df80-eea0-950d-3d0ec29af059">
+      <Execution id="8ec1ac1c-f2c2-4436-9cc6-a45a7418c10c" />
+      <TestMethod codeBase="D:/trev/Dev/dev4good/CharityPortal/CharityPortal.TestData/bin/Debug/CharityPortal.TestData.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CharityPortal.DataPopulation.DataPopulation, CharityPortal.TestData, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="PopulateTags" />
+      <DataSource connectionString="Driver={Microsoft Excel Driver (*.xls)};DriverId=790;Dbq=dev4good_charityportal_testdata.xls;DefaultDir=." providerInvariantName="System.Data.Odbc" tableName="Tag$" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="4166881a-df80-eea0-950d-3d0ec29af059" executionId="8ec1ac1c-f2c2-4436-9cc6-a45a7418c10c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="8ec1ac1c-f2c2-4436-9cc6-a45a7418c10c" testId="4166881a-df80-eea0-950d-3d0ec29af059" testName="PopulateTags" computerName="FETA" startTime="2011-07-02T18:19:19.8488602+01:00" endTime="2011-07-02T18:19:20.0398712+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8ec1ac1c-f2c2-4436-9cc6-a45a7418c10c">
+      <Output>
+        <ErrorInfo>
+          <Message>Method CharityPortal.DataPopulation.DataPopulation.TestEnd has wrong signature.  The method should have 0 parameters.</Message>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+</TestRun>
