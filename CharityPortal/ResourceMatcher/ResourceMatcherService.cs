@@ -203,8 +203,7 @@ namespace ResourceMatcher
                 }
 
                 string description = match.Groups["title"].Value; //description
-                resource.Description = description;
-                resource.Title = description;
+                
                 resource.Quantity = quantity;
                 resource.QuantityUnits = units;
 
@@ -216,7 +215,12 @@ namespace ResourceMatcher
                 if (imageMatches.Count > 0)
                 {
                     resource.ImageUrl = imageMatches[0].Groups[1].Value;
+                    description = description.Replace(resource.ImageUrl,string.Empty);
+                    resource.ImageUrl += ":small";
                 }
+
+                resource.Description = description;
+                resource.Title = description;
 
                 //resource.Tags.Add(new Tag() {Name = ""});
 

@@ -12,6 +12,9 @@
 <table>
     <tr>
         <th>
+            Image
+        </th>
+        <th>
             Title
         </th>
         <th>
@@ -29,6 +32,10 @@
 @foreach (var item in Model) {
     <tr>
         <td>
+        @if (!string.IsNullOrEmpty(item.ImageUrl)) { 
+            <img src="@item.ImageUrl" />
+        }
+        <td>
             @Html.DisplayFor(modelItem => item.Title)
         </td>
         <td>
@@ -40,10 +47,13 @@
         <td>
             @Html.DisplayFor(modelItem => item.QuantityUnits)
         </td>
+        
+            
+        </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
         </td>
     </tr>
 }
