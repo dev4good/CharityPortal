@@ -11,6 +11,8 @@ namespace CharityPortal.Controllers
 {
     public class VisualizationController : Controller
     {
+        private DataContextContainer db = new DataContextContainer();
+
         public ActionResult OverviewMap()
         {
             OverviewMapViewModel model = new OverviewMapViewModel();
@@ -28,6 +30,5 @@ namespace CharityPortal.Controllers
 
             return View(model);
         }
-
     }
 }
